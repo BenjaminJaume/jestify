@@ -1,0 +1,28 @@
+/* Dependencies */
+import React from 'react'
+import Enzyme, { shallow } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+
+/* Components */
+import List from './List'
+import Paragraph from './Paragraph'
+
+Enzyme.configure({ adapter: new Adapter() })
+
+describe('List', () => {
+    it('should render `This list is empty` inside a Paragraph component if items is an empty array', () => {
+        const wrapper = shallow(<List items={[]} />)
+        const paragraph = wrapper.find(Paragraph)
+        expect(paragraph.props().children).toEqual('This list is empty')
+        console.log(wrapper.debug())
+    })
+
+    it('should render a list with the body of each item inside a li', () => {
+        const itemsArray = [{ id: 1, body: 'Shopping' }, { id: 2, body: 'Exercise' }, { id: 3, body: 'Cook' }]
+        const wrapper = shallow(<List items={itemsArray} />)
+
+        const items = wrapper.find('li[className="item"]')
+        expect(items).toHaveLength(itemsArray.length)
+        expect(items.first().text()).toEqual('Shopping')
+    })
+})
